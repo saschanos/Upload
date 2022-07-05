@@ -1,21 +1,14 @@
 <phpunit backupGlobals="true"
-         backupStaticAttributes="false"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false"
-         syntaxCheck="false"
          bootstrap="tests/bootstrap.php">
    <testsuites>
         <testsuite name="Upload Test Suite">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist>
+    <coverage processUncoveredFiles="true">
+        <include>
             <directory>./src/Upload/</directory>
-        </whitelist>
-    </filter>
+        </include>
+    </coverage>
 </phpunit>
