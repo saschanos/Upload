@@ -80,8 +80,8 @@ class FileInfo extends SplFileInfo implements FileInfoInterface
     final public function __construct(string $filePathname, string $newName = null)
     {
         $desiredName = is_null($newName) ? $filePathname : $newName;
-        $this->setName(pathinfo($desiredName, PATHINFO_FILENAME));
         $this->setExtension(pathinfo($desiredName, PATHINFO_EXTENSION));
+        $this->setName(pathinfo($desiredName, PATHINFO_FILENAME));
 
         parent::__construct($filePathname);
     }
@@ -118,18 +118,82 @@ class FileInfo extends SplFileInfo implements FileInfoInterface
     /**
      * Set file name (without extension)
      *
-     * It also makes sure file name is safe
+     * Sanitize the filename (if outputting the filename to HTML you still need to escape)
      *
      * @param string $name
      * @return FileInfo Self
+     *
+     * @link https://stackoverflow.com/a/42058764
+     * @internal 1. file system reserved https://en.wikipedia.org/wiki/Filename#Reserved_characters_and_words
+     * phpcs:ignore
+     * @internal 2. control characters http://msdn.microsoft.com/en-us/library/windows/desktop/aa365247%28v=vs.85%29.aspx
+     * @internal 3. URI reserved https://www.rfc-editor.org/rfc/rfc3986#section-2.2
+     * @internal 4. URL unsafe characters https://www.ietf.org/rfc/rfc1738.txt
      */
     public function setName($name): FileInfo
     {
-        $name = preg_replace("/([^\w\s\d\-_~,;:\[\]\(\).]|[\.]{2,})/", "", $name);
-        $name = !is_null($name) ? basename($name) : '';
-        $this->name = $name;
+        $this->name = $this->sanitizeName($name);
 
         return $this;
+    }
+
+    protected function sanitizeName(string $name): string
+    {
+        $name = str_replace(['%20', '+', '.'], '-', $name); //replaces encoded space, +, or .
+        $name = (string) preg_replace('/[\r\n\t-]+/', '-', $name); //replace tab or new line characters
+        $name = (string) preg_replace(
+            '~
+        [%<>:"/\\\|?*]|          # @internal 1.
+        [\x00-\x1F]|            # @internal 2.
+        [#\[\]@!$&\'()+,;=]|    # @internal 3.
+        [{}^\~`]                # @internal 4.
+        ~x',
+            '-',
+            $name
+        );
+
+        // reduce consecutive characters
+        $name = (string) preg_replace(
+            [
+                '/ +/', // "file   name.zip" becomes "file name.zip"
+                '/_+/', // "file___name.zip" becomes "file_name.zip"
+                '/ - -+/', // "file - -name.zip" becomes "file--name.zip"
+                '/-+/', // "file--name.zip" becomes "file-name.zip"
+            ],
+            [
+                ' ',
+                '_',
+                '-',
+                '-',
+            ],
+            $name
+        );
+
+        $name = trim((string)$name, '.-_ '); //remove dot, hyphen, underscore, or space from start and end of string
+
+        /* Ensure filename is not a reserved Windows name, otherwise remove */
+        if (in_array(strtolower($name), $this->getReservedWindowsNames(), true)) {
+            $name = '';
+        }
+
+        /*
+         * Ensure filename is not longer than 255 bytes http://serverfault.com/a/9548/44086, otherwise shorten
+         */
+        $extension = $this->getExtension();
+        $maxLength = 255 - ($extension ? strlen($extension) + 1 : 0);
+
+        /* Use multibyte aware functions, if the server supports it */
+        if (function_exists('mb_strcut') && function_exists('mb_detect_encoding')) {
+            $name = mb_strcut($name, 0, $maxLength, (string)mb_detect_encoding($name));
+        } else {
+            $name = substr($name, 0, $maxLength);
+        }
+
+        if (empty($name)) {
+            $name = 'unnamed-file';
+        }
+
+        return $name;
     }
 
     /**
@@ -145,14 +209,57 @@ class FileInfo extends SplFileInfo implements FileInfoInterface
     /**
      * Set file extension (without dot prefix)
      *
+     * Sanitize the extension (lowercase, alphanumeric)
+     *
      * @param string $extension
      * @return FileInfo Self
      */
     public function setExtension($extension): FileInfo
     {
-        $this->extension = strtolower($extension);
+        $extension = strtolower($extension);
+        $extension = trim((string)preg_replace('/[^a-z0-9]/', '', $extension));
+
+        /* Remove Windows reserved extensions */
+        $extension = str_replace($this->getReservedWindowsNames(), '', $extension);
+
+        $this->extension = $extension;
 
         return $this;
+    }
+
+    /**
+     * Provide a list of reserved extensions / filenames in Windows
+     *
+     * @link https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file#naming-conventions
+     *
+     * @return string[]
+     */
+    protected function getReservedWindowsNames(): array
+    {
+        return [
+            'con',
+            'prn',
+            'aux',
+            'nul',
+            'com1',
+            'com2',
+            'com3',
+            'com4',
+            'com5',
+            'com6',
+            'com7',
+            'com8',
+            'com9',
+            'lpt1',
+            'lpt2',
+            'lpt3',
+            'lpt4',
+            'lpt5',
+            'lpt6',
+            'lpt7',
+            'lpt8',
+            'lpt9',
+        ];
     }
 
     /**
