@@ -1,8 +1,10 @@
 # Upload
 
-[![Build Status](https://img.shields.io/travis/brandonsavage/Upload.svg?style=flat-square)](https://travis-ci.org/brandonsavage/Upload)
-[![Latest Version](https://img.shields.io/github/release/brandonsavage/Upload.svg?style=flat-square)](https://github.com/brandonsavage/Upload/releases)
-[![Total Downloads](https://img.shields.io/packagist/dt/codeguy/upload.svg?style=flat-square)](https://packagist.org/packages/codeguy/upload)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/GravityPDF/Upload/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/GravityPDF/Upload/?branch=main)
+[![Build Status](https://scrutinizer-ci.com/g/GravityPDF/Upload/badges/build.png?b=main)](https://scrutinizer-ci.com/g/GravityPDF/Upload/build-status/main)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/GravityPDF/Upload/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence)
+[![codecov](https://codecov.io/gh/GravityPDF/Upload/branch/main/graph/badge.svg)](https://codecov.io/gh/GravityPDF/Upload)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 This component simplifies file validation and uploading.
 
