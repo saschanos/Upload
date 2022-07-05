@@ -3,6 +3,7 @@
 namespace Upload;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\MockObject\MockObject;
 use Upload\Storage\FileSystem;
 use Upload\Validation\Mimetype;
 use Upload\Validation\Size;
@@ -16,10 +17,11 @@ class FileTest extends TestCase
     protected $assetsDirectory;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|FileSystem
+     * @var StorageInterface
      */
     protected $storage;
 
+    /* phpcs:ignore */
     public function set_up()
     {
         parent::set_up();
@@ -46,10 +48,6 @@ class FileTest extends TestCase
             ->setConstructorArgs([$this->assetsDirectory])
             ->onlyMethods(['upload'])
             ->getMock();
-
-        $this->storage
-            ->method('upload')
-            ->willReturn(true);
 
         // Prepare uploaded files
         $_FILES['multiple'] = [
@@ -82,22 +80,22 @@ class FileTest extends TestCase
      * Construction tests
      *******************************************************************************/
 
-    public function testConstructionWithMultipleFiles()
+    public function testConstructionWithMultipleFiles(): void
     {
         $file = new File('multiple', $this->storage);
         $this->assertCount(2, $file);
-        $this->assertEquals('foo.txt', $file[0]->getNameWithExtension());
-        $this->assertEquals('bar.txt', $file[1]->getNameWithExtension());
+        $this->assertEquals('foo.txt', $file[0]->getNameWithExtension()); /* @phpstan-ignore-line */
+        $this->assertEquals('bar.txt', $file[1]->getNameWithExtension()); /* @phpstan-ignore-line */
     }
 
-    public function testConstructionWithSingleFile()
+    public function testConstructionWithSingleFile(): void
     {
         $file = new File('single', $this->storage);
         $this->assertCount(1, $file);
-        $this->assertEquals('single.txt', $file[0]->getNameWithExtension());
+        $this->assertEquals('single.txt', $file[0]->getNameWithExtension()); /* @phpstan-ignore-line */
     }
 
-    public function testConstructionWithInvalidKey()
+    public function testConstructionWithInvalidKey(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Cannot find uploaded file(s) identified by key: bar');
@@ -115,10 +113,17 @@ class FileTest extends TestCase
      * This test will make sure callbacks are called for each FileInfoInterface
      * object in the correct order.
      */
-    public function testCallbacks()
+    public function testCallbacks(): void
     {
         $this->expectOutputString(
-            "BeforeValidate: foo\nAfterValidate: foo\nBeforeValidate: bar\nAfterValidate: bar\nBeforeUpload: foo\nAfterUpload: foo\nBeforeUpload: bar\nAfterUpload: bar\n"
+            "BeforeValidate: foo\n" .
+            "AfterValidate: foo\n" .
+            "BeforeValidate: bar\n" .
+            "AfterValidate: bar\n" .
+            "BeforeUpload: foo\n" .
+            "AfterUpload: foo\n" .
+            "BeforeUpload: bar\n" .
+            "AfterUpload: bar\n"
         );
 
         $callbackBeforeValidate = function (FileInfoInterface $fileInfo) {
@@ -149,7 +154,7 @@ class FileTest extends TestCase
      * Validation tests
      *******************************************************************************/
 
-    public function testAddSingleValidation()
+    public function testAddSingleValidation(): void
     {
         $file = new File('single', $this->storage);
         $file->addValidation(
@@ -161,7 +166,7 @@ class FileTest extends TestCase
         $this->assertCount(1, $file->getValidations());
     }
 
-    public function testAddMultipleValidations()
+    public function testAddMultipleValidations(): void
     {
         $file = new File('single', $this->storage);
         $file->addValidations([
@@ -174,13 +179,13 @@ class FileTest extends TestCase
         $this->assertCount(2, $file->getValidations());
     }
 
-    public function testIsValidIfNoValidations()
+    public function testIsValidIfNoValidations(): void
     {
         $file = new File('single', $this->storage);
         $this->assertTrue($file->isValid());
     }
 
-    public function testIsValidWithPassingValidations()
+    public function testIsValidWithPassingValidations(): void
     {
         $file = new File('single', $this->storage);
         $file->addValidation(
@@ -191,7 +196,7 @@ class FileTest extends TestCase
         $this->assertTrue($file->isValid());
     }
 
-    public function testIsInvalidWithFailingValidations()
+    public function testIsInvalidWithFailingValidations(): void
     {
         $file = new File('single', $this->storage);
         $file->addValidation(
@@ -202,13 +207,13 @@ class FileTest extends TestCase
         $this->assertFalse($file->isValid());
     }
 
-    public function testIsInvalidIfHttpErrorCode()
+    public function testIsInvalidIfHttpErrorCode(): void
     {
         $file = new File('bad', $this->storage);
         $this->assertFalse($file->isValid());
     }
 
-    public function testIsInvalidIfNotUploadedFile()
+    public function testIsInvalidIfNotUploadedFile(): void
     {
         FileInfo::setFactory(function ($tmpName, $name) {
             $fileInfo = $this->getMockBuilder(FileInfo::class)
@@ -231,7 +236,7 @@ class FileTest extends TestCase
      * Error message tests
      *******************************************************************************/
 
-    public function testGetErrors()
+    public function testGetErrors(): void
     {
         $file = new File('single', $this->storage);
         $file->addValidation(
@@ -247,14 +252,20 @@ class FileTest extends TestCase
      * Upload tests
      *******************************************************************************/
 
-    public function testWillUploadIfValid()
+    public function testWillUploadIfValid(): void
     {
         $file = new File('single', $this->storage);
         $this->assertTrue($file->isValid());
-        $this->assertTrue($file->upload());
+
+        try {
+            $file->upload();
+            $this->assertTrue(true);
+        } catch (\Exception $e) {
+            $this->fail('Unexpected exception thrown');
+        }
     }
 
-    public function testWillNotUploadIfInvalid()
+    public function testWillNotUploadIfInvalid(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('File validation failed');
@@ -268,7 +279,7 @@ class FileTest extends TestCase
      * Helper tests
      *******************************************************************************/
 
-    public function testParsesHumanFriendlyFileSizes()
+    public function testParsesHumanFriendlyFileSizes(): void
     {
         $this->assertEquals(100, File::humanReadableToBytes('100'));
         $this->assertEquals(102400, File::humanReadableToBytes('100K'));

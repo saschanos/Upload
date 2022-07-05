@@ -13,6 +13,7 @@ class DimensionsTest extends TestCase
      */
     protected $assetsDirectory;
 
+    /* phpcs:ignore */
     public function set_up()
     {
         parent::set_up();
@@ -20,7 +21,7 @@ class DimensionsTest extends TestCase
         $this->assetsDirectory = dirname(__DIR__) . '/assets';
     }
 
-    public function testWidthAndHeight()
+    public function testWidthAndHeight(): void
     {
         $dimensions = new Dimensions(100, 100);
         $file = new FileInfo($this->assetsDirectory . '/foo.png', 'foo.png');
@@ -33,7 +34,7 @@ class DimensionsTest extends TestCase
         }
     }
 
-    public function testWidthDoesntMatch()
+    public function testWidthDoesntMatch(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('foo.png: Image width(100px) does not match required width(200px)');
@@ -43,7 +44,7 @@ class DimensionsTest extends TestCase
         $dimensions->validate($file);
     }
 
-    public function testHeightDoesntMatch()
+    public function testHeightDoesntMatch(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('foo.png: Image height(100px) does not match required height(200px)');

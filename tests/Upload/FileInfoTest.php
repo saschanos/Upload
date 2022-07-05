@@ -16,6 +16,7 @@ class FileInfoTest extends TestCase
      */
     protected $fileWithoutExtension;
 
+    /* phpcs:ignore */
     public function set_up()
     {
         parent::set_up();
@@ -24,58 +25,49 @@ class FileInfoTest extends TestCase
         $this->fileWithoutExtension = new FileInfo(__DIR__ . '/assets/foo_wo_ext', 'foo_wo_ext');
     }
 
-    public function testConstructor()
-    {
-        $this->assertSame('foo', $this->fileWithExtension->getName());
-        $this->assertSame('txt', $this->fileWithExtension->getExtension());
-
-        $this->assertSame('foo_wo_ext', $this->fileWithoutExtension->getName());
-        $this->assertSame('', $this->fileWithoutExtension->getExtension());
-    }
-
-    public function testGetName()
+    public function testGetName(): void
     {
         $this->assertSame('foo', $this->fileWithExtension->getName());
         $this->assertSame('foo_wo_ext', $this->fileWithoutExtension->getName());
     }
 
-    public function testSetName()
+    public function testSetName(): void
     {
         $this->fileWithExtension->setName('bar');
         $this->assertSame('bar', $this->fileWithExtension->getName());
     }
 
-    public function testGetNameWithExtension()
+    public function testGetNameWithExtension(): void
     {
         $this->assertSame('foo.txt', $this->fileWithExtension->getNameWithExtension());
         $this->assertSame('foo_wo_ext', $this->fileWithoutExtension->getNameWithExtension());
     }
 
-    public function testGetExtension()
+    public function testGetExtension(): void
     {
         $this->assertSame('txt', $this->fileWithExtension->getExtension());
         $this->assertSame('', $this->fileWithoutExtension->getExtension());
     }
 
-    public function testSetExtension()
+    public function testSetExtension(): void
     {
         $this->fileWithExtension->setExtension('csv');
         $this->assertSame('csv', $this->fileWithExtension->getExtension());
     }
 
-    public function testGetMimetype()
+    public function testGetMimetype(): void
     {
         $this->assertSame('text/plain', $this->fileWithExtension->getMimetype());
     }
 
-    public function testGetMd5()
+    public function testGetMd5(): void
     {
         $hash = md5_file(__DIR__ . '/assets/foo.txt');
 
         $this->assertSame($hash, $this->fileWithExtension->getMd5());
     }
 
-    public function testGetHash()
+    public function testGetHash(): void
     {
         $sha1Hash = hash_file('sha1', __DIR__ . '/assets/foo.txt');
         $this->assertSame($sha1Hash, $this->fileWithExtension->getHash('sha1'));

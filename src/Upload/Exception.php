@@ -1,20 +1,25 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Upload;
 
-class Exception extends \RuntimeException
+use RuntimeException;
+
+class Exception extends RuntimeException
 {
     /**
-     * @var \Upload\FileInfoInterface
+     * @var FileInfoInterface|null
      */
     protected $fileInfo;
 
     /**
      * Constructor
      *
-     * @param string                    $message  The Exception message
-     * @param \Upload\FileInfoInterface $fileInfo The related file instance
+     * @param string $message The Exception message
+     * @param FileInfoInterface|null $fileInfo The related file instance
      */
-    public function __construct($message, \Upload\FileInfoInterface $fileInfo = null)
+    public function __construct($message, FileInfoInterface $fileInfo = null)
     {
         $this->fileInfo = $fileInfo;
 
@@ -24,9 +29,9 @@ class Exception extends \RuntimeException
     /**
      * Get related file
      *
-     * @return \Upload\FileInfoInterface
+     * @return FileInfoInterface
      */
-    public function getFileInfo()
+    public function getFileInfo(): ?FileInfoInterface
     {
         return $this->fileInfo;
     }

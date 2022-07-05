@@ -13,6 +13,7 @@ class SizeTest extends TestCase
      */
     private $assetsDirectory;
 
+    /* phpcs:ignore */
     public function set_up()
     {
         parent::set_up();
@@ -20,7 +21,7 @@ class SizeTest extends TestCase
         $this->assetsDirectory = dirname(__DIR__) . '/assets';
     }
 
-    public function testValidFileSize()
+    public function testValidFileSize(): void
     {
         $file = new FileInfo($this->assetsDirectory . '/foo.txt', 'foo.txt');
         $validation = new Size(500);
@@ -33,7 +34,7 @@ class SizeTest extends TestCase
         }
     }
 
-    public function testValidFileSizeWithHumanReadableArgument()
+    public function testValidFileSizeWithHumanReadableArgument(): void
     {
         $file = new FileInfo($this->assetsDirectory . '/foo.txt', 'foo.txt');
         $validation = new Size('500B');
@@ -46,7 +47,7 @@ class SizeTest extends TestCase
         }
     }
 
-    public function testInvalidFileSize()
+    public function testInvalidFileSize(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('File size is too large. Must be less than: 400');
@@ -56,7 +57,7 @@ class SizeTest extends TestCase
         $validation->validate($file);
     }
 
-    public function testInvalidFileSizeWithHumanReadableArgument()
+    public function testInvalidFileSizeWithHumanReadableArgument(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('File size is too large. Must be less than: 400');

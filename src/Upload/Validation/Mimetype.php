@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Upload
  *
@@ -28,7 +29,15 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+declare(strict_types=1);
+
 namespace Upload\Validation;
+
+use RuntimeException;
+use Upload\Exception;
+use Upload\FileInfoInterface;
+use Upload\ValidationInterface;
 
 /**
  * Validate Upload Media Type
@@ -39,23 +48,23 @@ namespace Upload\Validation;
  * @since   1.0.0
  * @package Upload
  */
-class Mimetype implements \Upload\ValidationInterface
+class Mimetype implements ValidationInterface
 {
     /**
      * Valid media types
-     * @var array
+     * @var string[]
      */
     protected $mimetypes;
 
     /**
      * Constructor
      *
-     * @param string|array $mimetypes
+     * @param string|string[] $mimetypes
      */
     public function __construct($mimetypes)
     {
-        if (is_string($mimetypes) === true) {
-            $mimetypes = array($mimetypes);
+        if (is_string($mimetypes)) {
+            $mimetypes = [$mimetypes];
         }
         $this->mimetypes = $mimetypes;
     }
@@ -63,13 +72,16 @@ class Mimetype implements \Upload\ValidationInterface
     /**
      * Validate
      *
-     * @param  \Upload\FileInfoInterface  $fileInfo
-     * @throws \RuntimeException          If validation fails
+     * @param FileInfoInterface $fileInfo
+     * @throws RuntimeException          If validation fails
      */
-    public function validate(\Upload\FileInfoInterface $fileInfo)
+    public function validate(FileInfoInterface $fileInfo): void
     {
         if (in_array($fileInfo->getMimetype(), $this->mimetypes) === false) {
-            throw new \Upload\Exception(sprintf('Invalid mimetype. Must be one of: %s', implode(', ', $this->mimetypes)), $fileInfo);
+            throw new Exception(
+                sprintf('Invalid mimetype. Must be one of: %s', implode(', ', $this->mimetypes)),
+                $fileInfo
+            );
         }
     }
 }

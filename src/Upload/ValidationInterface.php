@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Upload
  *
@@ -28,6 +29,9 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+declare(strict_types=1);
+
 namespace Upload;
 
 /**
@@ -45,8 +49,8 @@ interface ValidationInterface
      * This method is responsible for validating an `\Upload\FileInfoInterface` instance.
      * If validation fails, an exception should be thrown.
      *
-     * @param  \Upload\FileInfoInterface $fileInfo
+     * @param FileInfoInterface $fileInfo
      * @throws \Exception                If validation fails
      */
-    public function validate(\Upload\FileInfoInterface $fileInfo);
+    public function validate(FileInfoInterface $fileInfo): void;
 }

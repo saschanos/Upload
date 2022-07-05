@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Upload
  *
@@ -28,6 +29,9 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+declare(strict_types=1);
+
 namespace Upload;
 
 /**
@@ -45,8 +49,8 @@ interface StorageInterface
      * This method is responsible for uploading an `\Upload\FileInfoInterface` instance
      * to its intended destination. If upload fails, an exception should be thrown.
      *
-     * @param  \Upload\FileInfoInterface $fileInfo
-     * @throws \Exception                If upload fails
+     * @param FileInfoInterface $fileInfo
+     * @throws \Exception                If validation fails
      */
-    public function upload(\Upload\FileInfoInterface $fileInfo);
+    public function upload(FileInfoInterface $fileInfo): void;
 }

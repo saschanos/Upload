@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Upload\Validation;
 
 use Upload\Exception;
@@ -9,12 +11,12 @@ use Upload\ValidationInterface;
 class Dimensions implements ValidationInterface
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $width;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $height;
 
@@ -22,23 +24,24 @@ class Dimensions implements ValidationInterface
      * @param int $expectedWidth
      * @param int $expectedHeight
      */
-    function __construct($expectedWidth, $expectedHeight)
+    public function __construct($expectedWidth, $expectedHeight)
     {
         $this->width = $expectedWidth;
         $this->height = $expectedHeight;
     }
 
     /**
-     * @inheritdoc
+     * @param FileInfoInterface $fileInfo
+     * @return void
      */
-    public function validate(FileInfoInterface $info)
+    public function validate(FileInfoInterface $fileInfo): void
     {
-        $dimensions = $info->getDimensions();
-        $filename = $info->getNameWithExtension();
+        $dimensions = $fileInfo->getDimensions();
+        $filename = $fileInfo->getNameWithExtension();
         if (!$dimensions) {
             throw new Exception(sprintf('%s: Could not detect image size.', $filename));
         }
-        if ($dimensions['width'] != $this->width) {
+        if ($dimensions['width'] !== $this->width) {
             throw new Exception(
                 sprintf(
                     '%s: Image width(%dpx) does not match required width(%dpx)',
@@ -48,7 +51,7 @@ class Dimensions implements ValidationInterface
                 )
             );
         }
-        if ($dimensions['height'] != $this->height) {
+        if ($dimensions['height'] !== $this->height) {
             throw new Exception(
                 sprintf(
                     '%s: Image height(%dpx) does not match required height(%dpx)',
