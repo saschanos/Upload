@@ -70,14 +70,16 @@ class FileSystem implements StorageInterface
      * @throws InvalidArgumentException            If directory does not exist
      * @throws InvalidArgumentException            If directory is not writable
      */
-    public function __construct($directory, $overwrite = false)
+    public function __construct(string $directory, bool $overwrite = false)
     {
         if (!is_dir($directory)) {
             throw new InvalidArgumentException('Directory does not exist');
         }
+
         if (!is_writable($directory)) {
             throw new InvalidArgumentException('Directory is not writable');
         }
+
         $this->directory = rtrim($directory, '/') . DIRECTORY_SEPARATOR;
         $this->overwrite = (bool)$overwrite;
     }
@@ -90,7 +92,7 @@ class FileSystem implements StorageInterface
     public function upload(FileInfoInterface $fileInfo): void
     {
         $destinationFile = $this->directory . $fileInfo->getNameWithExtension();
-        if ($this->overwrite === false && file_exists($destinationFile) === true) {
+        if ($this->overwrite === false && is_file($destinationFile) === true) {
             throw new Exception('File already exists', $fileInfo);
         }
 
@@ -109,7 +111,7 @@ class FileSystem implements StorageInterface
      * @param string $destination The destination file
      * @return bool
      */
-    protected function moveUploadedFile($source, $destination)
+    protected function moveUploadedFile(string $source, string $destination): bool
     {
         return move_uploaded_file($source, $destination);
     }

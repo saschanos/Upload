@@ -24,7 +24,7 @@ class Dimensions implements ValidationInterface
      * @param int $expectedWidth
      * @param int $expectedHeight
      */
-    public function __construct($expectedWidth, $expectedHeight)
+    public function __construct(int $expectedWidth, int $expectedHeight)
     {
         $this->width = $expectedWidth;
         $this->height = $expectedHeight;
@@ -38,9 +38,11 @@ class Dimensions implements ValidationInterface
     {
         $dimensions = $fileInfo->getDimensions();
         $filename = $fileInfo->getNameWithExtension();
+
         if (!$dimensions) {
             throw new Exception(sprintf('%s: Could not detect image size.', $filename));
         }
+
         if ($dimensions['width'] !== $this->width) {
             throw new Exception(
                 sprintf(
@@ -51,6 +53,7 @@ class Dimensions implements ValidationInterface
                 )
             );
         }
+
         if ($dimensions['height'] !== $this->height) {
             throw new Exception(
                 sprintf(
