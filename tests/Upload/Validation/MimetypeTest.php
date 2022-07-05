@@ -13,6 +13,7 @@ class MimetypeTest extends TestCase
      */
     private $assetsDirectory;
 
+    /* phpcs:ignore */
     public function set_up()
     {
         parent::set_up();
@@ -20,7 +21,7 @@ class MimetypeTest extends TestCase
         $this->assetsDirectory = dirname(__DIR__) . '/assets';
     }
 
-    public function testValidMimetype()
+    public function testValidMimetype(): void
     {
         $file = new FileInfo($this->assetsDirectory . '/foo.txt', 'foo.txt');
         $validation = new Mimetype(['text/plain']);
@@ -33,7 +34,7 @@ class MimetypeTest extends TestCase
         }
     }
 
-    public function testInvalidMimetype()
+    public function testInvalidMimetype(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Invalid mimetype. Must be one of: image/png');

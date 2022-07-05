@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Upload
  *
@@ -28,7 +29,16 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+declare(strict_types=1);
+
 namespace Upload\Validation;
+
+use RuntimeException;
+use Upload\Exception;
+use Upload\File;
+use Upload\FileInfoInterface;
+use Upload\ValidationInterface;
 
 /**
  * Validate Upload File Size
@@ -41,7 +51,7 @@ namespace Upload\Validation;
  * @since   1.0.0
  * @package Upload
  */
-class Size implements \Upload\ValidationInterface
+class Size implements ValidationInterface
 {
     /**
      * Minimum acceptable file size (bytes)
@@ -58,18 +68,18 @@ class Size implements \Upload\ValidationInterface
     /**
      * Constructor
      *
-     * @param int $maxSize Maximum acceptable file size in bytes (inclusive)
-     * @param int $minSize Minimum acceptable file size in bytes (inclusive)
+     * @param int|string $maxSize Maximum acceptable file size in bytes (inclusive)
+     * @param int|string $minSize Minimum acceptable file size in bytes (inclusive)
      */
     public function __construct($maxSize, $minSize = 0)
     {
         if (is_string($maxSize)) {
-            $maxSize = \Upload\File::humanReadableToBytes($maxSize);
+            $maxSize = File::humanReadableToBytes($maxSize);
         }
         $this->maxSize = $maxSize;
 
         if (is_string($minSize)) {
-            $minSize = \Upload\File::humanReadableToBytes($minSize);
+            $minSize = File::humanReadableToBytes($minSize);
         }
         $this->minSize = $minSize;
     }
@@ -77,19 +87,25 @@ class Size implements \Upload\ValidationInterface
     /**
      * Validate
      *
-     * @param  \Upload\FileInfoInterface  $fileInfo
-     * @throws \RuntimeException          If validation fails
+     * @param FileInfoInterface $fileInfo
+     * @throws RuntimeException          If validation fails
      */
-    public function validate(\Upload\FileInfoInterface $fileInfo)
+    public function validate(FileInfoInterface $fileInfo): void
     {
         $fileSize = $fileInfo->getSize();
 
         if ($fileSize < $this->minSize) {
-            throw new \Upload\Exception(sprintf('File size is too small. Must be greater than or equal to: %s', $this->minSize), $fileInfo);
+            throw new Exception(
+                sprintf('File size is too small. Must be greater than or equal to: %s', $this->minSize),
+                $fileInfo
+            );
         }
 
         if ($fileSize > $this->maxSize) {
-            throw new \Upload\Exception(sprintf('File size is too large. Must be less than: %s', $this->maxSize), $fileInfo);
+            throw new Exception(
+                sprintf('File size is too large. Must be less than: %s', $this->maxSize),
+                $fileInfo
+            );
         }
     }
 }

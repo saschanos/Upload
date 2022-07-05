@@ -13,6 +13,7 @@ class ExtensionTest extends TestCase
      */
     protected $assetsDirectory;
 
+    /* phpcs:ignore */
     public function set_up()
     {
         parent::set_up();
@@ -20,7 +21,7 @@ class ExtensionTest extends TestCase
         $this->assetsDirectory = dirname(__DIR__) . '/assets';
     }
 
-    public function testValidExtension()
+    public function testValidExtension(): void
     {
         $file = new FileInfo($this->assetsDirectory . '/foo.txt', 'foo.txt');
         $validation = new Extension('txt');
@@ -33,7 +34,7 @@ class ExtensionTest extends TestCase
         }
     }
 
-    public function testInvalidExtension()
+    public function testInvalidExtension(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Invalid file extension. Must be one of: txt');

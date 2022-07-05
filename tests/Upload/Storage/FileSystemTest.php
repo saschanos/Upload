@@ -14,9 +14,7 @@ class FileSystemTest extends TestCase
      */
     protected $assetsDirectory;
 
-    /**
-     * Setup (each test)
-     */
+    /* phpcs:ignore */
     public function set_up()
     {
         parent::set_up();
@@ -32,7 +30,7 @@ class FileSystemTest extends TestCase
         ];
     }
 
-    public function testInstantiationWithValidDirectory()
+    public function testInstantiationWithValidDirectory(): void
     {
         try {
             $storage = $this->getMockBuilder(FileSystem::class)
@@ -45,7 +43,7 @@ class FileSystemTest extends TestCase
         }
     }
 
-    public function testInstantiationWithInvalidDirectory()
+    public function testInstantiationWithInvalidDirectory(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Directory does not exist');
@@ -58,7 +56,7 @@ class FileSystemTest extends TestCase
     /**
      * Test won't overwrite existing file
      */
-    public function testWillNotOverwriteFile()
+    public function testWillNotOverwriteFile(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('File already exists');
@@ -70,7 +68,7 @@ class FileSystemTest extends TestCase
     /**
      * Test will overwrite existing file
      */
-    public function testWillOverwriteFile()
+    public function testWillOverwriteFile(): void
     {
         $storage = $this->getMockBuilder(FileSystem::class)
             ->setConstructorArgs([$this->assetsDirectory, true])
@@ -93,7 +91,7 @@ class FileSystemTest extends TestCase
         try {
             $storage->upload($fileInfo);
             $this->assertTrue(true);
-        } catch( Exception $e ) {
+        } catch (Exception $e) {
             $this->fail('Unexpected exception thrown');
         }
     }

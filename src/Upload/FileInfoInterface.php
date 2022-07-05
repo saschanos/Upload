@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Upload
  *
@@ -28,6 +29,9 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+declare(strict_types=1);
+
 namespace Upload;
 
 /**
@@ -39,25 +43,42 @@ namespace Upload;
  */
 interface FileInfoInterface
 {
+    /**
+     * @return string
+     */
     public function getPathname();
 
-    public function getName();
+    public function getName(): string;
 
-    public function setName($name);
+    /**
+     * @param string $name
+     * @return FileInfo
+     */
+    public function setName($name): FileInfo;
 
-    public function getExtension();
+    public function getExtension(): string;
 
-    public function setExtension($extension);
+    /**
+     * @param string $extension
+     * @return FileInfo
+     */
+    public function setExtension($extension): FileInfo;
 
-    public function getNameWithExtension();
+    public function getNameWithExtension(): string;
 
-    public function getMimetype();
+    public function getMimetype(): string;
 
+    /**
+     * @return int|false
+     */
     public function getSize();
 
-    public function getMd5();
+    public function getMd5(): string;
 
-    public function getDimensions();
+    /**
+     * @return array<string, int|float>
+     */
+    public function getDimensions(): array;
 
-    public function isUploadedFile();
+    public function isUploadedFile(): bool;
 }

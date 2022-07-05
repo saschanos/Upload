@@ -1,4 +1,4 @@
-name: PHPUnit
+name: Code Linter
 
 on:
   push:
@@ -15,17 +15,8 @@ concurrency:
 
 jobs:
   run:
-    name: ${{ matrix.php }} on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ ubuntu-latest ]
-        php: [ '7.3', '7.4', '8.0', '8.1' ]
-        include:
-          - php: '7.3'
-            os: ubuntu-latest
-            report: true
-
+    name: PSR12
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -33,7 +24,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: 7.3
 
       - name: Log debug information
         run: |
@@ -58,16 +49,10 @@ jobs:
           cache-name: cache-composer-dependencies
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-php-${{ matrix.php }}-date-${{ steps.get-date.outputs.date }}-composer-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-php-7.3-date-${{ steps.get-date.outputs.date }}-composer-${{ hashFiles('**/composer.json') }}
 
       - name: Install Composer dependencies
         run: composer install
 
       - name: Run PHPUnit tests
-        run: vendor/bin/phpunit
-
-      - name: Run (xDebug) tests
-        if: ${{ matrix.report }}
-        run: |
-          vendor/bin/phpunit --verbose --coverage-clover=tmp/coverage/report-xml/php-coverage1.xml
-          bash <(curl -s https://codecov.io/bash);
+        run: composer run lint

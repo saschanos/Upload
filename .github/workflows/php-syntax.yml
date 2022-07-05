@@ -1,4 +1,4 @@
-name: PHPUnit
+name: PHP Syntax Checker
 
 on:
   push:
@@ -21,10 +21,6 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         php: [ '7.3', '7.4', '8.0', '8.1' ]
-        include:
-          - php: '7.3'
-            os: ubuntu-latest
-            report: true
 
     steps:
       - name: Checkout
@@ -60,14 +56,9 @@ jobs:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-php-${{ matrix.php }}-date-${{ steps.get-date.outputs.date }}-composer-${{ hashFiles('**/composer.json') }}
 
+
       - name: Install Composer dependencies
         run: composer install
 
-      - name: Run PHPUnit tests
-        run: vendor/bin/phpunit
-
-      - name: Run (xDebug) tests
-        if: ${{ matrix.report }}
-        run: |
-          vendor/bin/phpunit --verbose --coverage-clover=tmp/coverage/report-xml/php-coverage1.xml
-          bash <(curl -s https://codecov.io/bash);
+      - name: Check PHP Syntax
+        run: composer run check-syntax
