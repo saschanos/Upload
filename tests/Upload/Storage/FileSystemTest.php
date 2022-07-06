@@ -95,4 +95,25 @@ class FileSystemTest extends TestCase
             $this->fail('Unexpected exception thrown');
         }
     }
+
+    public function testReturnsUploadedFileName(): void
+    {
+        $storage = $this->getMockBuilder(FileSystem::class)
+            ->setConstructorArgs([$this->assetsDirectory, true])
+            ->onlyMethods(['moveUploadedFile'])
+            ->getMock();
+
+        $storage
+            ->method('moveUploadedFile')
+            ->willReturn(true);
+
+        $fileName = dirname(__DIR__) . '/assets/foo.txt';
+
+        $fileInfo = new FileInfo(
+            $fileName
+        );
+
+        $this->assertSame($fileName, $storage->upload($fileInfo));
+        $this->assertSame($this->assetsDirectory, $storage->getDirectory());
+    }
 }

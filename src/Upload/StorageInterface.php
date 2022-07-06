@@ -52,5 +52,5 @@ interface StorageInterface
      * @param FileInfoInterface $fileInfo
      * @throws \Exception                If validation fails
      */
-    public function upload(FileInfoInterface $fileInfo): void;
+    public function upload(FileInfoInterface $fileInfo): string;
 }
