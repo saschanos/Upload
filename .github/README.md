@@ -1,12 +1,27 @@
 # Upload
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/GravityPDF/Upload/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/GravityPDF/Upload/?branch=main)
-[![Build Status](https://scrutinizer-ci.com/g/GravityPDF/Upload/badges/build.png?b=main)](https://scrutinizer-ci.com/g/GravityPDF/Upload/build-status/main)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/GravityPDF/Upload/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence)
 [![codecov](https://codecov.io/gh/GravityPDF/Upload/branch/main/graph/badge.svg)](https://codecov.io/gh/GravityPDF/Upload)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 This component simplifies file validation and uploading.
+
+**Why was this library forked?**
+
+* Original library was abandoned (untouched since 2018)
+* Bumped minimum PHP version to 7.3+
+* Sanitized filename and extension, and add UTF-8 filename support
+* Strict type checking
+* Added FileSystem::getDirectory() and FileInfo::setNameWithExtension() methods
+* PSR-12 Code Formatting
+* Automated tools: PHPUnit, PHPStan, PHPCS, and PHP Syntax Checker
+
+TODO: [PSR-7 and PSR-17 support (help wanted)](https://github.com/GravityPDF/Upload/issues/8)
+
+## Installation
+
+```
+composer require gravitypdf/upload
+```
 
 ## Usage
 
@@ -22,36 +37,40 @@ Assume a file is uploaded with this HTML form:
 When the HTML form is submitted, the server-side PHP code can validate and upload the file like this:
 
 ```php
-<?php
 $storage = new \Upload\Storage\FileSystem('/path/to/directory');
 $file = new \Upload\File('foo', $storage);
 
 // Optionally you can rename the file on upload
 $new_filename = uniqid();
 $file->setName($new_filename);
+$file->setExtension('txt');
+// Or all in one go
+$file->setFilenameWithExtension($new_filename . '.txt');
 
 // Validate file upload
 // MimeType List => http://www.iana.org/assignments/media-types/media-types.xhtml
-$file->addValidations(array(
+$file->addValidations([
     // Ensure file is of type "image/png"
     new \Upload\Validation\Mimetype('image/png'),
+    new \Upload\Validation\Extension('png'),
 
-    //You can also add multi mimetype validation
+    //You can also add multi mimetype validation or extensions
     //new \Upload\Validation\Mimetype(array('image/png', 'image/gif'))
+    //new \Upload\Validation\Extension(['png', 'gif']),
 
     // Ensure file is no larger than 5M (use "B", "K", M", or "G")
-    new \Upload\Validation\Size('5M')
-));
+    new \Upload\Validation\Size('5M'),
+]);
 
 // Access data about the file that has been uploaded
-$data = array(
-    'name'       => $file->getNameWithExtension(),
-    'extension'  => $file->getExtension(),
-    'mime'       => $file->getMimetype(),
-    'size'       => $file->getSize(),
-    'md5'        => $file->getMd5(),
-    'dimensions' => $file->getDimensions()
-);
+$data = [
+    'name' => $file->getNameWithExtension(),
+    'extension' => $file->getExtension(),
+    'mime' => $file->getMimetype(),
+    'size' => $file->getSize(),
+    'md5' => $file->getMd5(),
+    'dimensions' => $file->getDimensions(),
+];
 
 // Try to upload file
 try {
@@ -63,23 +82,10 @@ try {
 }
 ```
 
-## How to Install
-
-Install composer in your project:
-
-```
-curl -s https://getcomposer.org/installer | php
-```
-
-Require the package with composer:
-
-```
-php composer.phar require codeguy/upload
-```
-
-## Author
+## Authors
 
 [Josh Lockhart](https://github.com/codeguy)
+[Gravity PDF](https://github.com/GravityPDF)
 
 ## License
 

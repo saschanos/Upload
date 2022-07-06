@@ -45,7 +45,8 @@ use Upload\ValidationInterface;
  * This class validates an uploads file extension. It takes file extension with out dot
  * or array of extensions. For example: 'png' or array('jpg', 'png', 'gif').
  *
- * WARNING! Validation only by file extension not very secure.
+ * @internal WARNING! Validation only by file extension not very secure.
+ * Always use in conjunction with Upload\Validation\Mimetype
  *
  * @author  Alex Kucherenko <kucherenko.email@gmail.com>
  * @package Upload
