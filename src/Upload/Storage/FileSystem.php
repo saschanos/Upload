@@ -81,15 +81,16 @@ class FileSystem implements StorageInterface
         }
 
         $this->directory = rtrim($directory, '/') . DIRECTORY_SEPARATOR;
-        $this->overwrite = (bool)$overwrite;
+        $this->overwrite = $overwrite;
     }
 
     /**
      * Upload
      *
      * @param FileInfoInterface $fileInfo
+     * @return string
      */
-    public function upload(FileInfoInterface $fileInfo): void
+    public function upload(FileInfoInterface $fileInfo): string
     {
         $destinationFile = $this->directory . $fileInfo->getNameWithExtension();
         if ($this->overwrite === false && is_file($destinationFile) === true) {
@@ -99,6 +100,18 @@ class FileSystem implements StorageInterface
         if ($this->moveUploadedFile($fileInfo->getPathname(), $destinationFile) === false) {
             throw new Exception('File could not be moved to final destination.', $fileInfo);
         }
+
+        return $destinationFile;
+    }
+
+    /**
+     * Get directory (without trailing slash)
+     *
+     * @return string
+     */
+    public function getDirectory(): string
+    {
+        return rtrim($this->directory, DIRECTORY_SEPARATOR);
     }
 
     /**
