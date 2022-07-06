@@ -85,8 +85,8 @@ try {
 
 ## Authors
 
-[Josh Lockhart](https://github.com/codeguy)
-[Gravity PDF](https://github.com/GravityPDF)
+* [Josh Lockhart](https://github.com/codeguy)
+* [Gravity PDF](https://github.com/GravityPDF)
 
 ## License
 
