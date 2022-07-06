@@ -32,7 +32,7 @@
 
 declare(strict_types=1);
 
-namespace Upload;
+namespace GravityPdf\Upload;
 
 use finfo;
 use RuntimeException;
@@ -95,7 +95,9 @@ class FileInfo extends SplFileInfo implements FileInfoInterface
         if (is_callable(static::$factory)) {
             $result = call_user_func(static::$factory, $tmpName, $name);
             if ($result instanceof FileInfoInterface === false) {
-                throw new RuntimeException('FileInfo factory must return instance of \Upload\FileInfoInterface.');
+                throw new RuntimeException(
+                    'FileInfo factory must return instance of \GravityPdf\Upload\FileInfoInterface.'
+                );
             }
 
             return $result;

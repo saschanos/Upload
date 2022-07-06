@@ -32,7 +32,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Upload\\": "src/Upload"
+      "GravityPdf\\Upload\\": "src/Upload"
     }
   },
   "scripts": {

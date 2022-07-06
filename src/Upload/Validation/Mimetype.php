@@ -32,12 +32,12 @@
 
 declare(strict_types=1);
 
-namespace Upload\Validation;
+namespace GravityPdf\Upload\Validation;
 
 use RuntimeException;
-use Upload\Exception;
-use Upload\FileInfoInterface;
-use Upload\ValidationInterface;
+use GravityPdf\Upload\Exception;
+use GravityPdf\Upload\FileInfoInterface;
+use GravityPdf\Upload\ValidationInterface;
 
 /**
  * Validate Upload Media Type

@@ -8,6 +8,7 @@ This component simplifies file validation and uploading.
 **Why was this library forked?**
 
 * Original library was abandoned (untouched since 2018)
+* Adjusted namespace from \Upload to \GravityPdf\Upload
 * Bumped minimum PHP version to 7.3+
 * Sanitized filename and extension, and add UTF-8 filename support
 * Strict type checking
@@ -37,8 +38,8 @@ Assume a file is uploaded with this HTML form:
 When the HTML form is submitted, the server-side PHP code can validate and upload the file like this:
 
 ```php
-$storage = new \Upload\Storage\FileSystem('/path/to/directory');
-$file = new \Upload\File('foo', $storage);
+$storage = new \GravityPdf\Upload\Storage\FileSystem('/path/to/directory');
+$file = new \GravityPdf\Upload\File('foo', $storage);
 
 // Optionally you can rename the file on upload
 $new_filename = uniqid();
@@ -51,15 +52,15 @@ $file->setFilenameWithExtension($new_filename . '.txt');
 // MimeType List => http://www.iana.org/assignments/media-types/media-types.xhtml
 $file->addValidations([
     // Ensure file is of type "image/png"
-    new \Upload\Validation\Mimetype('image/png'),
-    new \Upload\Validation\Extension('png'),
+    new \GravityPdf\Upload\Validation\Mimetype('image/png'),
+    new \GravityPdf\Upload\Validation\Extension('png'),
 
     //You can also add multi mimetype validation or extensions
     //new \Upload\Validation\Mimetype(array('image/png', 'image/gif'))
     //new \Upload\Validation\Extension(['png', 'gif']),
 
     // Ensure file is no larger than 5M (use "B", "K", M", or "G")
-    new \Upload\Validation\Size('5M'),
+    new \GravityPdf\Upload\Validation\Size('5M'),
 ]);
 
 // Access data about the file that has been uploaded

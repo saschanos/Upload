@@ -32,7 +32,7 @@
 
 declare(strict_types=1);
 
-namespace Upload;
+namespace GravityPdf\Upload;
 
 /**
  * FileInfo Interface

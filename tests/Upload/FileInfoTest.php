@@ -1,6 +1,6 @@
 <?php
 
-namespace Upload;
+namespace GravityPdf\Upload;
 
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 

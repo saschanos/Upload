@@ -1,9 +1,9 @@
 <?php
 
-namespace Upload\Validation;
+namespace GravityPdf\Upload\Validation;
 
-use Upload\Exception;
-use Upload\FileInfo;
+use GravityPdf\Upload\Exception;
+use GravityPdf\Upload\FileInfo;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 class ExtensionTest extends TestCase

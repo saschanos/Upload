@@ -32,7 +32,7 @@
 
 declare(strict_types=1);
 
-namespace Upload;
+namespace GravityPdf\Upload;
 
 use ArrayAccess;
 use ArrayIterator;
@@ -210,7 +210,7 @@ class File implements ArrayAccess, IteratorAggregate, Countable
     /**
      * Set `beforeValidation` callable
      *
-     * @param callable $callable Should accept one `\Upload\FileInfoInterface` argument
+     * @param callable $callable Should accept one `\GravityPdf\Upload\FileInfoInterface` argument
      * @return File                        Self
      */
     public function beforeValidate(callable $callable): File
@@ -223,7 +223,7 @@ class File implements ArrayAccess, IteratorAggregate, Countable
     /**
      * Set `afterValidation` callable
      *
-     * @param callable $callable Should accept one `\Upload\FileInfoInterface` argument
+     * @param callable $callable Should accept one `\GravityPdf\Upload\FileInfoInterface` argument
      * @return File                        Self
      */
     public function afterValidate(callable $callable): File
@@ -236,7 +236,7 @@ class File implements ArrayAccess, IteratorAggregate, Countable
     /**
      * Set `beforeUpload` callable
      *
-     * @param callable $callable Should accept one `\Upload\FileInfoInterface` argument
+     * @param callable $callable Should accept one `\GravityPdf\Upload\FileInfoInterface` argument
      * @return File                        Self
      */
     public function beforeUpload(callable $callable): File
@@ -249,7 +249,7 @@ class File implements ArrayAccess, IteratorAggregate, Countable
     /**
      * Set `afterUpload` callable
      *
-     * @param callable $callable Should accept one `\Upload\FileInfoInterface` argument
+     * @param callable $callable Should accept one `\GravityPdf\Upload\FileInfoInterface` argument
      * @return File                        Self
      */
     public function afterUpload(callable $callable): File

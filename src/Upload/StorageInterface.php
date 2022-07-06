@@ -32,7 +32,7 @@
 
 declare(strict_types=1);
 
-namespace Upload;
+namespace GravityPdf\Upload;
 
 /**
  * Storage Interface
@@ -46,7 +46,7 @@ interface StorageInterface
     /**
      * Upload file
      *
-     * This method is responsible for uploading an `\Upload\FileInfoInterface` instance
+     * This method is responsible for uploading an `\GravityPdf\Upload\FileInfoInterface` instance
      * to its intended destination. If upload fails, an exception should be thrown.
      *
      * @param FileInfoInterface $fileInfo
