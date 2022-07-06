@@ -84,7 +84,7 @@ class Extension implements ValidationInterface
     {
         $fileExtension = strtolower($fileInfo->getExtension());
 
-        if (in_array($fileExtension, $this->allowedExtensions, true) === false) {
+        if (!in_array($fileExtension, $this->allowedExtensions, true)) {
             throw new Exception(
                 sprintf('Invalid file extension. Must be one of: %s', implode(', ', $this->allowedExtensions)),
                 $fileInfo

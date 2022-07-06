@@ -77,7 +77,7 @@ class Mimetype implements ValidationInterface
      */
     public function validate(FileInfoInterface $fileInfo): void
     {
-        if (in_array($fileInfo->getMimetype(), $this->mimetypes) === false) {
+        if (!in_array($fileInfo->getMimetype(), $this->mimetypes, true)) {
             throw new Exception(
                 sprintf('Invalid mimetype. Must be one of: %s', implode(', ', $this->mimetypes)),
                 $fileInfo

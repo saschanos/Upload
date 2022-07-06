@@ -76,11 +76,13 @@ class Size implements ValidationInterface
         if (is_string($maxSize)) {
             $maxSize = File::humanReadableToBytes($maxSize);
         }
+
         $this->maxSize = $maxSize;
 
         if (is_string($minSize)) {
             $minSize = File::humanReadableToBytes($minSize);
         }
+
         $this->minSize = $minSize;
     }
 
