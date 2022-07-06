@@ -89,6 +89,16 @@ class FileInfoTest extends TestCase
     }
 
     /**
+     * @dataProvider providerSetNameSanitizing
+     */
+    public function testSetNameWithExtension(string $expectedName, string $expectedExtension, string $filename): void
+    {
+        $this->fileWithExtension->setNameWithExtension($filename);
+        $this->assertSame($expectedName, $this->fileWithExtension->getName());
+        $this->assertSame($expectedExtension, $this->fileWithExtension->getExtension());
+    }
+
+    /**
      * @return array<int, array<int,string>>
      */
     public function providerSetNameSanitizing(): array
