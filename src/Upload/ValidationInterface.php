@@ -32,7 +32,7 @@
 
 declare(strict_types=1);
 
-namespace Upload;
+namespace GravityPdf\Upload;
 
 /**
  * Validation Interface
@@ -46,7 +46,7 @@ interface ValidationInterface
     /**
      * Validate file
      *
-     * This method is responsible for validating an `\Upload\FileInfoInterface` instance.
+     * This method is responsible for validating an `\GravityPdf\Upload\FileInfoInterface` instance.
      * If validation fails, an exception should be thrown.
      *
      * @param FileInfoInterface $fileInfo

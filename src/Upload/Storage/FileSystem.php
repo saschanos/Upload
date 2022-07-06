@@ -32,12 +32,12 @@
 
 declare(strict_types=1);
 
-namespace Upload\Storage;
+namespace GravityPdf\Upload\Storage;
 
 use InvalidArgumentException;
-use Upload\Exception;
-use Upload\FileInfoInterface;
-use Upload\StorageInterface;
+use GravityPdf\Upload\Exception;
+use GravityPdf\Upload\FileInfoInterface;
+use GravityPdf\Upload\StorageInterface;
 
 /**
  * FileSystem Storage

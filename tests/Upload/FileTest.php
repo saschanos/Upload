@@ -1,12 +1,11 @@
 <?php
 
-namespace Upload;
+namespace GravityPdf\Upload;
 
 use InvalidArgumentException;
-use PHPUnit\Framework\MockObject\MockObject;
-use Upload\Storage\FileSystem;
-use Upload\Validation\Mimetype;
-use Upload\Validation\Size;
+use GravityPdf\Upload\Storage\FileSystem;
+use GravityPdf\Upload\Validation\Mimetype;
+use GravityPdf\Upload\Validation\Size;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 class FileTest extends TestCase

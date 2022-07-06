@@ -32,12 +32,12 @@
 
 declare(strict_types=1);
 
-namespace Upload\Validation;
+namespace GravityPdf\Upload\Validation;
 
 use RuntimeException;
-use Upload\Exception;
-use Upload\FileInfoInterface;
-use Upload\ValidationInterface;
+use GravityPdf\Upload\Exception;
+use GravityPdf\Upload\FileInfoInterface;
+use GravityPdf\Upload\ValidationInterface;
 
 /**
  * Validate File Extension
@@ -46,7 +46,7 @@ use Upload\ValidationInterface;
  * or array of extensions. For example: 'png' or array('jpg', 'png', 'gif').
  *
  * @internal WARNING! Validation only by file extension not very secure.
- * Always use in conjunction with Upload\Validation\Mimetype
+ * Always use in conjunction with GravityPdf\Upload\Validation\Mimetype
  *
  * @author  Alex Kucherenko <kucherenko.email@gmail.com>
  * @package Upload
@@ -63,8 +63,8 @@ class Extension implements ValidationInterface
      * Constructor
      *
      * @param string|string[] $allowedExtensions Allowed file extensions
-     * @example new \Upload\Validation\Extension(array('png','jpg','gif'))
-     * @example new \Upload\Validation\Extension('png')
+     * @example new \GravityPdf\Upload\Validation\Extension(array('png','jpg','gif'))
+     * @example new \GravityPdf\Upload\Validation\Extension('png')
      */
     public function __construct($allowedExtensions)
     {
