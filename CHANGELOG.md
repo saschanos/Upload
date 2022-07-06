@@ -1,3 +1,9 @@
+# Upload 2.0.1
+
+## Bug Fixes
+
+* Revert removal of `\GravityPdf\Upload\File::__call()` magic method in 2.0.0. 
+
 # Upload 2.0.0
 
 ## Breaking Changes

@@ -57,6 +57,7 @@ use RuntimeException;
 /**
  * @implements IteratorAggregate<int, FileInfoInterface>
  * @implements ArrayAccess<int, FileInfoInterface>
+ * @mixin FileInfoInterface
  */
 class File implements ArrayAccess, IteratorAggregate, Countable
 {
@@ -311,9 +312,38 @@ class File implements ArrayAccess, IteratorAggregate, Countable
         return $this->errors;
     }
 
-    /********************************************************************************
-     * Helper Methods
-     *******************************************************************************/
+    /**
+     * @param string $name
+     * @param array<int,mixed> $arguments
+     * @return mixed
+     */
+    public function __call(string $name, array $arguments)
+    {
+        $count = count($this->objects);
+        $result = null;
+
+        if ($count) {
+            if ($count > 1) {
+                $result = [];
+                foreach ($this->objects as $object) {
+                    $callable = [$object, $name];
+                    if (!is_callable($callable)) {
+                        throw new Exception('Method does not exist in FileInfoInterface: ' . $name);
+                    }
+
+                    $result[] = call_user_func_array($callable, $arguments);
+                }
+            } else {
+                $callable = [$this->objects[0], $name];
+                if (!is_callable($callable)) {
+                    throw new Exception('Method does not exist in FileInfoInterface: ' . $name);
+                }
+                $result = call_user_func_array($callable, $arguments);
+            }
+        }
+
+        return $result;
+    }
 
     /**
      * Upload file (delegated to storage object)
@@ -335,10 +365,6 @@ class File implements ArrayAccess, IteratorAggregate, Countable
 
         return true;
     }
-
-    /********************************************************************************
-     * Upload
-     *******************************************************************************/
 
     /**
      * Is this collection valid and without errors?
