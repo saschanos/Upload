@@ -80,8 +80,7 @@ class FileInfo extends SplFileInfo implements FileInfoInterface
     final public function __construct(string $filePathname, string $newName = null)
     {
         $desiredName = is_null($newName) ? $filePathname : $newName;
-        $this->setExtension(pathinfo($desiredName, PATHINFO_EXTENSION));
-        $this->setName(pathinfo($desiredName, PATHINFO_FILENAME));
+        $this->setNameWithExtension($desiredName);
 
         parent::__construct($filePathname);
     }
@@ -270,6 +269,20 @@ class FileInfo extends SplFileInfo implements FileInfoInterface
     public function getNameWithExtension(): string
     {
         return $this->extension === '' ? $this->name : sprintf('%s.%s', $this->name, $this->extension);
+    }
+
+    /**
+     * Set the file name with extension
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setNameWithExtension(string $name): FileInfo
+    {
+        $this->setExtension(pathinfo($name, PATHINFO_EXTENSION));
+        $this->setName(pathinfo($name, PATHINFO_FILENAME));
+
+        return $this;
     }
 
     /**
