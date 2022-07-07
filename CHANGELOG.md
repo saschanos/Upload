@@ -1,8 +1,11 @@
-# Upload 2.0.1
+# Upload 3.0.0
 
-## Bug Fixes
+## Breaking Changes
 
-* Revert removal of `\GravityPdf\Upload\File::__call()` magic method in 2.0.0. 
+* Revert removal of `\GravityPdf\Upload\File::__call()` magic method in 2.0.0, restoring API functionality to match v1
+* Add `setNameWithExtension()` method to `\GravityPdf\Upload\FileInfoInterface`
+* Change type signature `\GravityPdf\Upload\FileInfoInterface::setName(string $name)` 
+* Change type signature `\GravityPdf\Upload\FileInfoInterface::setExtension(string $extension)`
 
 # Upload 2.0.0
 
