@@ -6,6 +6,7 @@
 * Add `setNameWithExtension()` method to `\GravityPdf\Upload\FileInfoInterface`
 * Change type signature `\GravityPdf\Upload\FileInfoInterface::setName(string $name)` 
 * Change type signature `\GravityPdf\Upload\FileInfoInterface::setExtension(string $extension)`
+* Remove `\GravityPdf\Upload\Validation\Dimensions` validation class
 
 # Upload 2.0.0
 
