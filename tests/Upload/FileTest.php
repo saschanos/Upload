@@ -2,10 +2,10 @@
 
 namespace GravityPdf\Upload;
 
-use InvalidArgumentException;
 use GravityPdf\Upload\Storage\FileSystem;
 use GravityPdf\Upload\Validation\Mimetype;
 use GravityPdf\Upload\Validation\Size;
+use InvalidArgumentException;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 class FileTest extends TestCase
@@ -83,15 +83,52 @@ class FileTest extends TestCase
     {
         $file = new File('multiple', $this->storage);
         $this->assertCount(2, $file);
-        $this->assertEquals('foo.txt', $file[0]->getNameWithExtension()); /* @phpstan-ignore-line */
-        $this->assertEquals('bar.txt', $file[1]->getNameWithExtension()); /* @phpstan-ignore-line */
+        $this->assertSame('foo.txt', $file[0]->getNameWithExtension()); /* @phpstan-ignore-line */
+        $this->assertSame('bar.txt', $file[1]->getNameWithExtension()); /* @phpstan-ignore-line */
+
+        /* Test __call() magic method */
+        $this->assertSame(['foo.txt', 'bar.txt'], $file->getNameWithExtension());
+        $this->assertSame(['foo', 'bar'], $file->getName());
+        $this->assertSame(['txt', 'txt'], $file->getExtension());
+
+        $file->setName('foobar');
+        $this->assertSame(['foobar', 'foobar'], $file->getName());
+
+        $file->setExtension('rtf');
+        $this->assertSame(['rtf', 'rtf'], $file->getExtension());
+
+        $file->setNameWithExtension('this.txt');
+        $this->assertSame(['this.txt', 'this.txt'], $file->getNameWithExtension());
+
+        /* Test array accessor */
+        foreach ($file as $i => $upload) {
+            $upload->setNameWithExtension(sprintf('file-%d.doc', $i + 1));
+        }
+
+        $this->assertCount(2, $file);
+        $this->assertSame('file-1.doc', $file[0]->getNameWithExtension()); /* @phpstan-ignore-line */
+        $this->assertSame('file-2.doc', $file[1]->getNameWithExtension()); /* @phpstan-ignore-line */
     }
 
     public function testConstructionWithSingleFile(): void
     {
         $file = new File('single', $this->storage);
         $this->assertCount(1, $file);
-        $this->assertEquals('single.txt', $file[0]->getNameWithExtension()); /* @phpstan-ignore-line */
+        $this->assertSame('single.txt', $file[0]->getNameWithExtension()); /* @phpstan-ignore-line */
+
+        /* Test __call() magic method */
+        $this->assertSame('single.txt', $file->getNameWithExtension());
+        $this->assertSame('single', $file->getName());
+        $this->assertSame('txt', $file->getExtension());
+
+        $file->setName('foobar');
+        $this->assertSame('foobar', $file->getName());
+
+        $file->setExtension('rtf');
+        $this->assertSame('rtf', $file->getExtension());
+
+        $file->setNameWithExtension('this.txt');
+        $this->assertSame('this.txt', $file->getNameWithExtension());
     }
 
     public function testConstructionWithInvalidKey(): void
@@ -195,6 +232,17 @@ class FileTest extends TestCase
         $this->assertTrue($file->isValid());
     }
 
+    public function testIsMultipleValidWithPassingValidations(): void
+    {
+        $file = new File('multiple', $this->storage);
+        $file->addValidation(
+            new Mimetype([
+                'text/plain',
+            ])
+        );
+        $this->assertTrue($file->isValid());
+    }
+
     public function testIsInvalidWithFailingValidations(): void
     {
         $file = new File('single', $this->storage);
@@ -245,6 +293,18 @@ class FileTest extends TestCase
         );
         $file->isValid();
         $this->assertCount(1, $file->getErrors());
+    }
+
+    public function testMultipleGetErrors(): void
+    {
+        $file = new File('multiple', $this->storage);
+        $file->addValidation(
+            new Mimetype([
+                'text/csv',
+            ])
+        );
+        $file->isValid();
+        $this->assertCount(2, $file->getErrors());
     }
 
     /********************************************************************************

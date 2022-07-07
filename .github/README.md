@@ -41,13 +41,6 @@ When the HTML form is submitted, the server-side PHP code can validate and uploa
 $storage = new \GravityPdf\Upload\Storage\FileSystem('/path/to/directory');
 $file = new \GravityPdf\Upload\File('foo', $storage);
 
-// Optionally you can rename the file on upload
-$new_filename = uniqid();
-$file->setName($new_filename);
-$file->setExtension('txt');
-// Or all in one go
-$file->setFilenameWithExtension($new_filename . '.txt');
-
 // Validate file upload
 // MimeType List => http://www.iana.org/assignments/media-types/media-types.xhtml
 $file->addValidations([
@@ -63,7 +56,8 @@ $file->addValidations([
     new \GravityPdf\Upload\Validation\Size('5M'),
 ]);
 
-// Access data about the file that has been uploaded
+// Access data about the file
+// If upload accepts multiple files an array will be returned for each of these
 $data = [
     'name' => $file->getNameWithExtension(),
     'extension' => $file->getExtension(),
@@ -73,7 +67,17 @@ $data = [
     'dimensions' => $file->getDimensions(),
 ];
 
-// Try to upload file
+// If you have an upload field that accepts multiple files you can access each file's info individually
+$firstFileName = $file[0]->getNameWithExtension();
+$secondFileName = $file[1]->getNameWithExtension();
+
+// or loop over all files for this key
+foreach($file as $upload) {
+    $name = $upload->getNameWithExtension();
+    $upload->setName(uniqid());
+}
+
+// Try to upload file(s)
 try {
     // Success!
     $file->upload();
