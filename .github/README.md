@@ -49,8 +49,8 @@ $file->addValidations([
     new \GravityPdf\Upload\Validation\Extension('png'),
 
     //You can also add multi mimetype validation or extensions
-    //new \Upload\Validation\Mimetype(array('image/png', 'image/gif'))
-    //new \Upload\Validation\Extension(['png', 'gif']),
+    //new \GravityPdf\Upload\Validation\Mimetype(array('image/png', 'image/gif'))
+    //new \GravityPdf\Upload\Validation\Extension(['png', 'gif']),
 
     // Ensure file is no larger than 5M (use "B", "K", M", or "G")
     new \GravityPdf\Upload\Validation\Size('5M'),
