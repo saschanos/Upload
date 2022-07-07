@@ -131,7 +131,7 @@ class FileInfo extends SplFileInfo implements FileInfoInterface
      * @internal 3. URI reserved https://www.rfc-editor.org/rfc/rfc3986#section-2.2
      * @internal 4. URL unsafe characters https://www.ietf.org/rfc/rfc1738.txt
      */
-    public function setName($name): FileInfo
+    public function setName(string $name): FileInfo
     {
         $this->name = $this->sanitizeName($name);
 
@@ -215,7 +215,7 @@ class FileInfo extends SplFileInfo implements FileInfoInterface
      * @param string $extension
      * @return FileInfo Self
      */
-    public function setExtension($extension): FileInfo
+    public function setExtension(string $extension): FileInfo
     {
         $extension = strtolower($extension);
         $extension = trim((string)preg_replace('/[^a-z0-9]/', '', $extension));

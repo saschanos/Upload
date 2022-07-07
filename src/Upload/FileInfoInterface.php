@@ -54,7 +54,7 @@ interface FileInfoInterface
      * @param string $name
      * @return FileInfo
      */
-    public function setName($name): FileInfo;
+    public function setName(string $name): FileInfo;
 
     public function getExtension(): string;
 
@@ -62,9 +62,11 @@ interface FileInfoInterface
      * @param string $extension
      * @return FileInfo
      */
-    public function setExtension($extension): FileInfo;
+    public function setExtension(string $extension): FileInfo;
 
     public function getNameWithExtension(): string;
+
+    public function setNameWithExtension(string $filename): FileInfo;
 
     public function getMimetype(): string;
 
