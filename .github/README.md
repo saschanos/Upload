@@ -39,6 +39,8 @@ When the HTML form is submitted, the server-side PHP code can validate and uploa
 
 ```php
 $storage = new \GravityPdf\Upload\Storage\FileSystem('/path/to/directory');
+// To override existing files when uploading, pass `true` as the second paramter
+// $storage = new \GravityPdf\Upload\Storage\FileSystem('/path/to/directory', true);
 $file = new \GravityPdf\Upload\File('foo', $storage);
 
 // Validate file upload
@@ -69,7 +71,9 @@ $data = [
 
 // If you have an upload field that accepts multiple files you can access each file's info individually
 $firstFileName = $file[0]->getNameWithExtension();
-$secondFileName = $file[1]->getNameWithExtension();
+if(isset($file[1])) {
+    $secondFileName = $file[1]->getNameWithExtension();
+}
 
 // or loop over all files for this key
 foreach($file as $upload) {
@@ -82,8 +86,12 @@ try {
     // Success!
     $file->upload();
 } catch (\Exception $e) {
-    // Fail!
+    // Validation errors
     $errors = $file->getErrors();
+    if(count($errors) === 0) {
+        // Failed for another reason, like the file already exists
+        $error = $e->getMessage();
+    }
 }
 ```
 
