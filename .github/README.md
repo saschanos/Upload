@@ -12,7 +12,8 @@ This component simplifies file validation and uploading.
 * Bumped minimum PHP version to 7.3+
 * Sanitized filename and extension, and add UTF-8 filename support
 * Strict type checking
-* Added FileSystem::getDirectory() and FileInfo::setNameWithExtension() methods
+* Added `FileSystem::getDirectory()` and `FileInfo::setNameWithExtension()` methods
+* Included unreleased code from upstream repo
 * PSR-12 Code Formatting
 * Automated tools: PHPUnit, PHPStan, PHPCS, and PHP Syntax Checker
 
@@ -39,7 +40,7 @@ When the HTML form is submitted, the server-side PHP code can validate and uploa
 
 ```php
 $storage = new \GravityPdf\Upload\Storage\FileSystem('/path/to/directory');
-// To override existing files when uploading, pass `true` as the second paramter
+// To override existing files when uploading, pass `true` as the second parameter
 // $storage = new \GravityPdf\Upload\Storage\FileSystem('/path/to/directory', true);
 $file = new \GravityPdf\Upload\File('foo', $storage);
 
@@ -51,7 +52,7 @@ $file->addValidations([
     new \GravityPdf\Upload\Validation\Extension('png'),
 
     //You can also add multi mimetype validation or extensions
-    //new \GravityPdf\Upload\Validation\Mimetype(array('image/png', 'image/gif'))
+    //new \GravityPdf\Upload\Validation\Mimetype(['image/png', 'image/gif'])
     //new \GravityPdf\Upload\Validation\Extension(['png', 'gif']),
 
     // Ensure file is no larger than 5M (use "B", "K", M", or "G")
@@ -76,9 +77,9 @@ if(isset($file[1])) {
 }
 
 // or loop over all files for this key
-foreach($file as $upload) {
+foreach($file as $i => $upload) {
     $name = $upload->getNameWithExtension();
-    $upload->setName(uniqid());
+    $upload->setName('file-'.$i);
 }
 
 // Try to upload file(s)
