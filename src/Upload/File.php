@@ -438,21 +438,39 @@ class File implements ArrayAccess, IteratorAggregate, Countable
      * Array Access Interface
      *******************************************************************************/
 
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
     public function offsetExists($offset): bool
     {
         return isset($this->objects[$offset]);
     }
 
+    /**
+     * @param mixed $offset
+     * @return FileInfoInterface|null
+     */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->objects[$offset] ?? null;
     }
 
+    /**
+     * @param mixed $offset
+     * @param FileInfoInterface $value
+     * @return void
+     */
     public function offsetSet($offset, $value): void
     {
         $this->objects[$offset] = $value;
     }
 
+    /**
+     * @param mixed $offset
+     * @return void
+     */
     public function offsetUnset($offset): void
     {
         unset($this->objects[$offset]);
