@@ -90,7 +90,7 @@ class FileInfo extends SplFileInfo implements FileInfoInterface
         static::$factory = $callable;
     }
 
-    public static function createFromFactory(string $tmpName, string $name = null): FileInfoInterface
+    public static function createFromFactory(string $tmpName, ?string $name = null): FileInfoInterface
     {
         if (is_callable(static::$factory)) {
             $result = call_user_func(static::$factory, $tmpName, $name);
