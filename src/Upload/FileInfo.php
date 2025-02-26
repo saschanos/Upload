@@ -77,7 +77,7 @@ class FileInfo extends SplFileInfo implements FileInfoInterface
      * @param string $filePathname Absolute path to uploaded file on disk
      * @param string|null $newName Desired file name (with extension) of uploaded file
      */
-    final public function __construct(string $filePathname, string $newName = null)
+    final public function __construct(string $filePathname, ?string $newName = null)
     {
         $desiredName = is_null($newName) ? $filePathname : $newName;
         $this->setNameWithExtension($desiredName);
